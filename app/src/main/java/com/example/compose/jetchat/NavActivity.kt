@@ -80,10 +80,12 @@ class NavActivity : AppCompatActivity() {
                         drawerState = drawerState,
                         selectedMenu = selectedMenu,
                         onChatClicked = {
-                            findNavController().popBackStack(R.id.nav_home, false)
-                            scope.launch {
-                                drawerState.close()
+                            if (it == "ws_chat") {
+                                findNavController().navigate(R.id.nav_ws_chat)
+                            } else {
+                                findNavController().popBackStack(R.id.nav_home, false)
                             }
+                            scope.launch { drawerState.close() }
                             selectedMenu = it
                         },
                         onProfileClicked = {
