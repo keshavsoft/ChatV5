@@ -70,9 +70,11 @@ fun JetchatDrawerContent(onProfileClicked: (String) -> Unit, onChatClicked: (Str
         DrawerHeader()
         DividerItem()
         DrawerItemHeader("Chats")
+
         ChatItem("composers", selectedMenu == "composers") {
             onChatClicked("composers")
         }
+
         ChatItem("droidcon-nyc", selectedMenu == "droidcon-nyc") {
             onChatClicked("droidcon-nyc")
         }
@@ -85,6 +87,9 @@ fun JetchatDrawerContent(onProfileClicked: (String) -> Unit, onChatClicked: (Str
             onChatClicked("ws_chat_v1")
         }
 
+        ChatItem("ws-chatV2", selectedMenu == "ws_chat_v2") {
+            onChatClicked("ws_chat_v2")
+        }
 
         DividerItem(modifier = Modifier.padding(horizontal = 28.dp))
         DrawerItemHeader("Recent Profiles")
