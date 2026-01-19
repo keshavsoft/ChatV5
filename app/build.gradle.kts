@@ -89,6 +89,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.generativeai)
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
