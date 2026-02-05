@@ -81,6 +81,7 @@ class NavActivity : AppCompatActivity() {
                         selectedMenu = selectedMenu,
                         onChatClicked = {
                             when (it) {
+                                "ws_chat_v4" -> findNavController().navigate(R.id.nav_ws_chat_v4)
                                 "ws_chat_v3" -> findNavController().navigate(R.id.nav_ws_chat_v3)
                                 "ws_chat_v2" -> findNavController().navigate(R.id.nav_ws_chat_v2)
                                 "ws_chat_v1" -> findNavController().navigate(R.id.nav_ws_chat_v1)

@@ -12,9 +12,11 @@ import com.example.compose.jetchat.conversation.ConversationUiState
 import com.example.compose.jetchat.conversation.Message
 import com.example.compose.jetchat.feature.websocketcode.ChatWebSocketViewModel
 import com.example.compose.jetchat.theme.JetchatTheme
+import androidx.fragment.app.activityViewModels
+import com.example.compose.jetchat.MainViewModel
 
 class WebSocketChatV1Fragment : Fragment() {
-
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: ChatWebSocketViewModel by viewModels()
 
     override fun onCreateView(
@@ -26,11 +28,9 @@ class WebSocketChatV1Fragment : Fragment() {
             setContent {
                 JetchatTheme {
 
-                    // collect websocket messages
                     val wsMessages =
                         viewModel.messages.collectAsStateWithLifecycle().value
 
-                    // build ConversationUiState (JetChat way)
                     val uiState = ConversationUiState(
                         channelName = "WebSocket V1",
                         channelMembers = 1,
@@ -43,14 +43,13 @@ class WebSocketChatV1Fragment : Fragment() {
                         }
                     )
 
-                    // show V1 screen
                     ConversationScreenV1(
                         uiState = uiState,
                         navigateToProfile = {},
                         onNavIconPressed = {
-                            requireActivity()
-                                .onBackPressedDispatcher
-                                .onBackPressed()
+                            mainViewModel.openDrawer()
+                            // INTENTIONALLY EMPTY
+                            // Drawer is controlled by parent (Activity / Scaffold)
                         }
                     )
                 }

@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.compose.jetchat.MainViewModel
 import com.example.compose.jetchat.conversation.ConversationUiState
 import com.example.compose.jetchat.conversation.Message
 import com.example.compose.jetchat.feature.websocketcode.ChatWebSocketViewModel
 import com.example.compose.jetchat.theme.JetchatTheme
+import kotlin.getValue
 
 class WebSocketChatV2Fragment : Fragment() {
-
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: ChatWebSocketViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,10 +51,7 @@ class WebSocketChatV2Fragment : Fragment() {
                         uiState = uiState,
                         navigateToProfile = {},
                         onNavIconPressed = {
-                            requireActivity()
-                                .onBackPressedDispatcher
-                                .onBackPressed()
-                        }
+                            mainViewModel.openDrawer()                        }
                     )
                 }
             }

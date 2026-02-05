@@ -95,6 +95,10 @@ fun JetchatDrawerContent(onProfileClicked: (String) -> Unit, onChatClicked: (Str
             onChatClicked("ws_chat_v3")
         }
 
+        ChatItem("ws-chatV4", selectedMenu == "ws_chat_v4") {
+            onChatClicked("ws_chat_v4")
+        }
+
         DividerItem(modifier = Modifier.padding(horizontal = 28.dp))
         DrawerItemHeader("Recent Profiles")
         ProfileItem(
