@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Drawer Versioning Guide (Compose Drawer)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: #fff;
+            padding: 32px 24px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        section {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #0284c7;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 6px 0;
+        }
+
+        .note {
+            background: #ecfeff;
+            border-left: 4px solid #06b6d4;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Drawer Menu Versioning (Compose)</h1>
+        <p>How to add a new WebSocket version to the Jetpack Compose drawer</p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>1. Purpose of This Document</h2>
+            <p>
+                This guide explains how new feature versions (V1, V2, V3, etc.)
+                are added to the application drawer when the drawer is implemented
+                using <strong>Jetpack Compose</strong>.
+            </p>
+            <p>
+                In this project, the drawer is <strong>not driven by menu XML</strong>.
+                It is fully controlled by a composable function.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Important Architecture Note</h2>
+            <ul>
+                <li>Drawer items are defined in a composable</li>
+                <li>Menu XML files are NOT used for WebSocket items</li>
+                <li>Each drawer item is manually wired to navigation</li>
+            </ul>
+
+            <div class="note">
+                If a version is not added to the drawer composable,
+                it will never appear in the UI—even if navigation is configured.
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Drawer Source File</h2>
+            <p>
+                All drawer chat items are defined in:
+            </p>
+
+            <pre>
+com.example.compose.jetchat.components.JetchatDrawerContent
+        </pre>
+        </section>
+
+        <section>
+            <h2>4. Existing Pattern (V1 & V2)</h2>
+            <p>
+                Existing WebSocket versions are added using the following pattern:
+            </p>
+
+            <pre>
+ChatItem("ws-chatV1", selectedMenu == "ws_chat_v1") {
+    onChatClicked("ws_chat_v1")
+}
+
+ChatItem("ws-chatV2", selectedMenu == "ws_chat_v2") {
+    onChatClicked("ws_chat_v2")
+}
+        </pre>
+        </section>
+
+        <section>
+            <h2>5. Adding a New Version (V3)</h2>
+            <p>
+                To add a new version to the drawer, insert a new <code>ChatItem</code>
+                following the same pattern:
+            </p>
+
+            <pre>
+ChatItem("ws-chatV3", selectedMenu == "ws_chat_v3") {
+    onChatClicked("ws_chat_v3")
+}
+        </pre>
+
+            <div class="warning">
+                The string passed to <code>onChatClicked()</code>
+                must exactly match the navigation key used in the activity.
+            </div>
+        </section>
+
+        <section>
+            <h2>6. How Navigation Is Triggered</h2>
+            <p>
+                Drawer clicks are routed in <strong>NavActivity</strong>
+                using a <code>when</code> condition:
+            </p>
+
+            <pre>
+"ws_chat_v3" -> findNavController().navigate(R.id.nav_ws_chat_v3)
+        </pre>
+
+            <p>
+                As long as the keys match, navigation works automatically.
+            </p>
+        </section>
+
+        <section>
+            <h2>7. Best Practices</h2>
+            <ul>
+                <li>Keep version names consistent across UI and navigation</li>
+                <li>Add new versions below older ones for clarity</li>
+                <li>Never reuse an existing key for a new version</li>
+                <li>Treat newer versions as experimental unless promoted</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        Drawer Versioning Guide • Jetpack Compose Architecture
+    </footer>
+
+</body>
+
+</html>

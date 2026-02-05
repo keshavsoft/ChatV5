@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket UI Versioning Guide (V2 → V3)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #fff;
+            padding: 32px 24px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        section {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #4f46e5;
+        }
+
+        section h3 {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 6px 0;
+        }
+
+        .note {
+            background: #eef2ff;
+            border-left: 4px solid #6366f1;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>WebSocket UI Versioning Guide</h1>
+        <p>How to safely copy V2 to V3 and continue feature development</p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>1. Purpose of This Document</h2>
+            <p>
+                This document explains the standard process used in this project to create
+                a new WebSocket UI version (<strong>V3</strong>) from an existing version (<strong>V2</strong>).
+            </p>
+            <p>
+                The goal is to:
+            </p>
+            <ul>
+                <li>Preserve older versions for reference and rollback</li>
+                <li>Allow safe experimentation in newer versions</li>
+                <li>Maintain clean and readable project structure</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. Existing Folder Structure</h2>
+            <p>
+                All WebSocket UI versions are stored under the same module path:
+            </p>
+
+            <pre>
+app/src/main/java/com/example/compose/jetchat/ui/websocket/
+ ├── v1/
+ ├── v2/
+ └── v3/   (to be created)
+        </pre>
+
+            <p>
+                Each version contains its own UI and Fragment implementation.
+            </p>
+        </section>
+
+        <section>
+            <h2>3. Creating V3 from V2</h2>
+
+            <h3>Step 1: Copy the V2 Folder</h3>
+            <ul>
+                <li>Right-click on <strong>v2</strong> folder</li>
+                <li>Select <strong>Copy</strong></li>
+                <li>Paste it inside the same <strong>websocket</strong> directory</li>
+                <li>Rename the pasted folder to <strong>v3</strong></li>
+            </ul>
+
+            <h3>Step 2: Rename Files</h3>
+            <p>Inside <strong>v3</strong>, rename the files using Android Studio refactor:</p>
+
+            <pre>
+ConversationScreenV2.kt  →  ConversationScreenV3.kt
+WebSocketChatV2Fragment.kt → WebSocketChatV3Fragment.kt
+        </pre>
+
+            <div class="note">
+                Always use <strong>Refactor → Rename</strong> to avoid broken references.
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Updating Class and Function Names</h2>
+
+            <h3>Conversation Screen</h3>
+            <pre>
+@Composable
+fun ConversationScreenV3(...) { }
+        </pre>
+
+            <h3>Fragment Class</h3>
+            <pre>
+class WebSocketChatV3Fragment : Fragment() { }
+        </pre>
+
+            <p>
+                Ensure all internal references are updated from V2 to V3.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Navigation Configuration</h2>
+            <p>
+                Add a new fragment entry for V3 in the navigation graph:
+            </p>
+
+            <pre>
+&lt;fragment
+    android:id="@+id/webSocketChatV3Fragment"
+    android:name="com.example.compose.jetchat.ui.websocket.v3.WebSocketChatV3Fragment"
+    android:label="WebSocket Chat V3" /&gt;
+        </pre>
+
+            <div class="warning">
+                Do not remove V2 navigation entries. Older versions must remain intact.
+            </div>
+        </section>
+
+        <section>
+            <h2>6. How V3 Should Be Developed Further</h2>
+            <p>
+                V3 is intended for improvements and experimentation without affecting V2.
+            </p>
+
+            <h3>Recommended Enhancements</h3>
+            <ul>
+                <li>Improved UI spacing and colors</li>
+                <li>Message animations</li>
+                <li>Typing indicators</li>
+                <li>Connection state display</li>
+                <li>Error and reconnect handling</li>
+            </ul>
+
+            <p>
+                Any V3-specific logic should remain inside the <strong>v3</strong> package.
+            </p>
+        </section>
+
+        <section>
+            <h2>7. Best Practices</h2>
+            <ul>
+                <li>Never modify older versions after creating a new one</li>
+                <li>Keep ViewModels common, UIs versioned</li>
+                <li>Commit each version upgrade separately</li>
+                <li>Use V3 as a playground for new ideas</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        WebSocket Versioning Guide • Internal Project Documentation
+    </footer>
+
+</body>
+
+</html>
